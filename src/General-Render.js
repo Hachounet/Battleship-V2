@@ -1,9 +1,8 @@
 /* eslint-disable class-methods-use-this */
 /* eslint-disable no-console */
 
-/* This Class generate the general rendering of the Battleship game. Order of constructor is import : 
-First we get ships keys from Players, then we generate PlayerParts and create gameboard for each players, then we generate ships position and gameboards.
-*/
+/* This class generates the general rendering of the application. The order of implementation is important to ensure that the various functions retrieve the necessary elements. It could be refactored by working on the controller instance rather than on the parameters given at instantiation.
+ */
 
 export default class GeneralRender {
   constructor(p1keys, p2keys, controller) {
@@ -120,7 +119,7 @@ export default class GeneralRender {
     const messageDiv = document.createElement('div');
     messageDiv.id = 'message-div';
     const message = document.createElement('p');
-    message.textContent = 'This is a test';
+    message.textContent = 'Once done, click on a cell to begin the fight !';
     messageDiv.append(message);
     this.menuPart.append(messageDiv);
   }
@@ -139,7 +138,7 @@ export default class GeneralRender {
     labelSpan.classList.add('label');
     labelSpan.textContent = ' VS AI';
 
-    AIOrPlayer.append(transitionSpan, gradientSpan, labelSpan);
+    AIOrPlayer.append(transitionSpan, gradientSpan, labelSpan); // SHOULD BE RANDOMIZE
 
     AIOrPlayer.addEventListener('click', () => {
       // create own function

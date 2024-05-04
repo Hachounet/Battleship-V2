@@ -1,5 +1,7 @@
 /* eslint-disable class-methods-use-this */
 
+import { generateRandomMove } from './Randomize-Helper';
+
 export default class AI {
   constructor(queue = []) {
     this.allLogs = new Set();
@@ -8,32 +10,14 @@ export default class AI {
     this.lastResult = false;
   }
 
-  generateRandom(min, max) {
-    const minCeiled = Math.ceil(min);
-    const maxFloored = Math.floor(max);
-    const randomNumb = Math.floor(
-      Math.random() * (maxFloored - minCeiled + 1) + minCeiled
-    );
-    return randomNumb;
-  }
-
-  generateRandomMove() {
-    // 65 74
-    const col = this.generateRandom(65, 74);
-    const row = this.generateRandom(1, 10);
-    const string = String.fromCharCode(col);
-    const concat = string.concat(row.toString());
-    return concat;
-  }
-
   play(choice, queuecoord) {
     // If choice is true do Random else use queuecoord
     let coord = 0;
     if (choice === true) {
-      coord = this.generateRandomMove();
+      coord = generateRandomMove();
 
       while (this.allLogs.has(coord)) {
-        coord = this.generateRandomMove();
+        coord = generateRandomMove();
       }
 
       this.allLogs.add(coord);

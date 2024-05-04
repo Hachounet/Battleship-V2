@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
 import Ships from './Ships';
+import { generateRandomMove } from './Randomize-Helper';
 
 export default class Gameboard {
   constructor(missedLogs = new Set(), shipsLogs = []) {
@@ -22,6 +23,10 @@ export default class Gameboard {
     this.placeShip('F6', 3, 'row');
     this.placeShip('J6', 3, 'row');
     this.placeShip('E10', 6, 'col');
+  }
+
+  randomizedShips() {
+    // NEED TO CHECK FOR EVERY SHIPS IF THEIR NOT IN SAME PLACE
   }
 
   placeShip(coord, length, rowOrCol) {

@@ -1,6 +1,9 @@
 /* eslint-disable class-methods-use-this */
 /* eslint-disable no-console */
 
+// This Class is used to generate the different statuses of each battlefield. It also adds eventListeners to play on the enemy board.
+// It could be refactored by using the controller instance instead of the various parameters given at instantiation.
+
 export default class Render {
   constructor(
     p1entries,
