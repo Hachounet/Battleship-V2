@@ -16,34 +16,37 @@ export default class Controller {
     this.p2keys = this.player2.Gameboard.adjacencyList;
     this.p1entries = Object.entries(this.player1.Gameboard.adjacencyList);
     this.p2entries = Object.entries(this.player2.Gameboard.adjacencyList);
-    this.GRender = new GeneralRender(this.p1keys, this.p2keys);
+    this.GRender = new GeneralRender(this.p1keys, this.p2keys, this);
     this.render = new Render(
       this.p1entries,
       this.p2entries,
       this.player1.Gameboard.missedLogs,
       this.player2.Gameboard.missedLogs,
       this.playerTurn,
-      true
+      true,
+      this
     );
-    document.addEventListener('cellclick', (event) => {
-      this.handleCellClick(event.detail);
-    });
-
-    document.addEventListener('restart', this.init);
   }
 
-  init() {
+  restart() {
     console.log('launched');
     this.player1 = new Player('Player 1');
     this.player2 = new Player('AI');
-    this.GRender = new GeneralRender(this.p1keys, this.p2keys);
-    this.generateNewRender();
-  }
-
-  handleCellClick(data) {
-    if (this.playerTurn === 'Player 1') {
-      this.receiveAttackPos(data);
-    }
+    this.p1keys = this.player1.Gameboard.adjacencyList;
+    this.p2keys = this.player2.Gameboard.adjacencyList;
+    this.p1entries = Object.entries(this.player1.Gameboard.adjacencyList);
+    this.p2entries = Object.entries(this.player2.Gameboard.adjacencyList);
+    this.GRender.destroy();
+    this.GRender = new GeneralRender(this.p1keys, this.p2keys, this);
+    this.render = new Render(
+      this.p1entries,
+      this.p2entries,
+      this.player1.Gameboard.missedLogs,
+      this.player2.Gameboard.missedLogs,
+      this.playerTurn,
+      true,
+      this
+    );
   }
 
   switchTurn() {
@@ -89,7 +92,8 @@ export default class Controller {
       this.player1.Gameboard.missedLogs,
       this.player2.Gameboard.missedLogs,
       this.playerTurn,
-      false
+      false,
+      this
     );
   }
 

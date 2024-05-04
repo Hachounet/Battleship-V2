@@ -6,10 +6,11 @@ First we get ships keys from Players, then we generate PlayerParts and create ga
 */
 
 export default class GeneralRender {
-  constructor(p1keys, p2keys, restart) {
+  constructor(p1keys, p2keys, controller) {
     this.P1keys = Object.keys(p1keys);
     this.P2Keys = Object.keys(p2keys);
-    this.restart = restart;
+    this.controller = controller;
+
     this.body = document.querySelector('body');
     this.generatePlayerParts();
 
@@ -169,11 +170,13 @@ export default class GeneralRender {
     menuOptionsDiv.append(AIOrPlayer, start);
     this.menuPart.append(menuOptionsDiv);
 
-    start.addEventListener('click', this.emit('restart'));
+    start.addEventListener('click', () => {
+      this.controller.restart();
+    });
   }
 
-  emit(eventName, data) {
-    const event = new CustomEvent(eventName, { detail: data });
-    document.dispatchEvent(event);
+  destroy() {
+    const body = document.querySelector('body');
+    body.innerHTML = '';
   }
 }

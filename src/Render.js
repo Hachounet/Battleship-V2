@@ -8,7 +8,8 @@ export default class Render {
     p1missedLogs,
     p2missedLogs,
     playerTurn,
-    addEvent
+    addEvent,
+    controller
   ) {
     this.p1entries = p1entries;
     this.p2entries = p2entries;
@@ -16,6 +17,7 @@ export default class Render {
     this.p2missedLogs = p2missedLogs;
     this.playerTurn = playerTurn;
     this.addEvent = addEvent;
+    this.controller = controller;
 
     this.renderBattlefield(this.p1entries, this.p2entries);
     this.checkBeforeAddEvent();
@@ -33,16 +35,11 @@ export default class Render {
       item.addEventListener(
         'click',
         (event) => {
-          this.emit('cellclick', event.target.id.toString().slice(3));
+          this.controller.receiveAttackPos(event.target.id.toString().slice(3));
         },
         { once: true }
       );
     });
-  }
-
-  emit(eventName, data) {
-    const event = new CustomEvent(eventName, { detail: data });
-    document.dispatchEvent(event);
   }
 
   endRender() {
@@ -84,24 +81,5 @@ export default class Render {
         cell.classList.add('touched');
       }
     });
-    // Old render part for opponent. Should be REWORKED
-    /* entries2.forEach((array) => {
-      const { slot } = array[1];
-
-      if (slot === null) {
-        const cellID = array[0];
-        const cell = document.getElementById('GB2'.concat(cellID));
-        cell.classList.add('empty');
-      } else if (slot === 'touched') {
-        const cellID = array[0];
-        console.log(cellID);
-        const cell = document.getElementById('GB2'.concat(cellID));
-        cell.classList.add('touched');
-      } else {
-        const cellID = array[0];
-        const cell = document.getElementById('GB2'.concat(cellID));
-        cell.classList.add('ships');
-      }
-    }); */
   }
 }
