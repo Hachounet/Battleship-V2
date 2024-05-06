@@ -76,7 +76,13 @@ export default class Render {
     entries2.forEach((array) => {
       const cellID = array[0];
       const cell = document.getElementById('GB2'.concat(cellID));
-      cell.classList.add('empty');
+
+      const { slot } = array[1];
+      if (slot === null) {
+        cell.classList.add('empty');
+      } else {
+        cell.classList.add('ships');
+      }
 
       if (this.p2missedLogs.has(cellID)) {
         cell.classList.add('w-touched');

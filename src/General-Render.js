@@ -4,6 +4,8 @@
 /* This class generates the general rendering of the application. The order of implementation is important to ensure that the various functions retrieve the necessary elements. It could be refactored by working on the controller instance rather than on the parameters given at instantiation.
  */
 
+import Gameboard from './Gameboard';
+
 export default class GeneralRender {
   constructor(p1keys, p2keys, controller) {
     this.P1keys = Object.keys(p1keys);
@@ -105,7 +107,7 @@ export default class GeneralRender {
     this.leftPart.append(P1Name);
 
     const P2Name = document.createElement('p');
-    P2Name.textContent = 'P2';
+    P2Name.textContent = 'Opponent';
     this.rightPart.append(P2Name);
   }
 
@@ -127,34 +129,7 @@ export default class GeneralRender {
   generateMenuOptions() {
     const menuOptionsDiv = document.createElement('div');
     menuOptionsDiv.id = 'menu-options';
-    const AIOrPlayer = document.createElement('button');
 
-    const transitionSpan = document.createElement('span');
-    const gradientSpan = document.createElement('span');
-    const labelSpan = document.createElement('span');
-
-    transitionSpan.classList.add('transition');
-    gradientSpan.classList.add('gradient');
-    labelSpan.classList.add('label');
-    labelSpan.textContent = ' VS AI';
-
-    AIOrPlayer.append(transitionSpan, gradientSpan, labelSpan); // SHOULD BE RANDOMIZE
-
-    AIOrPlayer.addEventListener('click', () => {
-      // create own function
-      const p2Name = document.querySelector('div#right-part p');
-      if (p2Name.textContent === 'P2') {
-        p2Name.textContent = 'AI';
-      } else {
-        p2Name.textContent = 'P2';
-      }
-
-      if (labelSpan.textContent === ' VS AI') {
-        labelSpan.textContent = ' VS Player';
-      } else {
-        labelSpan.textContent = ' VS AI';
-      }
-    });
     const start = document.createElement('button');
     const transitionSpanStart = document.createElement('span');
     const gradientSpanStart = document.createElement('span');
@@ -163,10 +138,10 @@ export default class GeneralRender {
     transitionSpanStart.classList.add('transition');
     gradientSpanStart.classList.add('gradient');
     labelSpanStart.classList.add('label');
-    labelSpanStart.textContent = 'Start';
+    labelSpanStart.textContent = 'Randomize Ships / (Re)start';
     start.append(transitionSpanStart, gradientSpanStart, labelSpanStart);
 
-    menuOptionsDiv.append(AIOrPlayer, start);
+    menuOptionsDiv.append(start);
     this.menuPart.append(menuOptionsDiv);
 
     start.addEventListener('click', () => {

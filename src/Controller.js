@@ -3,7 +3,6 @@
 /* eslint-disable class-methods-use-this */
 
 import GeneralRender from './General-Render';
-
 import Player from './Player';
 import Render from './Render';
 
@@ -78,14 +77,13 @@ export default class Controller {
     }
     if (this.playerTurn === 'AI') {
       const result = this.player1.Gameboard.receiveAttack(infos);
-      console.log(this.player2.gamemode.lastResult);
+
       this.player2.gamemode.lastResult = result;
       this.endOfTurn();
     }
   }
 
   generateNewRender() {
-    this.render = null;
     this.render = new Render(
       this.p1entries,
       this.p2entries,
@@ -114,12 +112,14 @@ export default class Controller {
   }
 
   endOfGame() {
+    console.log(this.player1.Gameboard.shipsLogs);
     let result = false;
     if (this.player1.Gameboard.allSunk()) {
       this.GRender.changeMessage(`${this.playerTurn} have win !`);
 
       this.callRenderToEnd();
       result = true;
+      this.playerTurn = 'Player 1';
       return result;
     }
     if (this.player2.Gameboard.allSunk()) {
@@ -127,8 +127,10 @@ export default class Controller {
 
       this.callRenderToEnd();
       result = true;
+      this.playerTurn = 'Player 1';
       return result;
     }
+
     return result;
   }
 
