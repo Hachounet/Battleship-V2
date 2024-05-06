@@ -1,6 +1,12 @@
+/* eslint-disable no-prototype-builtins */
+/* eslint-disable class-methods-use-this */
 /* eslint-disable no-console */
 import Ships from './Ships';
-import { generateRandomMove } from './Randomize-Helper';
+import {
+  generateDirection,
+  generateLength,
+  generateRandomMove,
+} from './Randomize-Helper';
 
 export default class Gameboard {
   constructor(missedLogs = new Set(), shipsLogs = []) {
@@ -9,24 +15,104 @@ export default class Gameboard {
     this.adjacencyList = {};
     this.populateGraph();
     this.populateEdge();
-    this.populateShips();
-  }
-
-  populateShips() {
-    this.placeShip('A1', 2, 'col');
-    this.placeShip('D1', 3, 'row');
-    this.placeShip('G1', 4, 'col');
-    this.placeShip('A3', 4, 'row');
-    this.placeShip('A8', 2, 'col');
-    this.placeShip('F3', 3, 'col');
-    this.placeShip('J3', 2, 'row');
-    this.placeShip('F6', 3, 'row');
-    this.placeShip('J6', 3, 'row');
-    this.placeShip('E10', 6, 'col');
+    this.randomizedShips();
   }
 
   randomizedShips() {
-    // NEED TO CHECK FOR EVERY SHIPS IF THEIR NOT IN SAME PLACE
+    const arrayOfLength = [2, 2, 3, 3, 3, 3, 4, 4, 6];
+
+    while (arrayOfLength.length !== 0) {
+      const randomPlacement = generateRandomMove();
+      const randomDirection = generateDirection();
+      const randomLength = generateLength(arrayOfLength);
+
+      if (randomDirection === 'col') {
+        const result = this.checkColPosForRandomPlacements(
+          randomPlacement,
+          randomLength
+        );
+
+        if (result === true) {
+          this.placeShip(randomPlacement, randomLength, 'col');
+          const index = arrayOfLength.indexOf(randomLength);
+          arrayOfLength.splice(index, 1);
+        }
+      }
+      if (randomDirection === 'row') {
+        const result = this.checkRowPosForRandomPlacements(
+          randomPlacement,
+          randomLength
+        );
+
+        if (result === true) {
+          this.placeShip(randomPlacement, randomLength, 'row');
+          const index = arrayOfLength.indexOf(randomLength);
+          arrayOfLength.splice(index, 1);
+        }
+      }
+    }
+  }
+
+  checkRowPosForRandomPlacements(randomPlacement, randomLength) {
+    const col = randomPlacement.slice(0, 1);
+    const colCharCode = col.charCodeAt(0);
+    const row = randomPlacement.slice(1);
+
+    const arrayOfTruth = [];
+    let counter = 0;
+    while (counter !== randomLength) {
+      if (
+        this.adjacencyList.hasOwnProperty(
+          String.fromCharCode(colCharCode)
+            .concat(Number(row) + counter)
+            .toString()
+        ) &&
+        this.adjacencyList[
+          String.fromCharCode(colCharCode)
+            .concat(Number(row) + counter)
+            .toString()
+        ].slot === null
+      ) {
+        arrayOfTruth.push(true);
+      } else {
+        arrayOfTruth.push(false);
+      }
+
+      counter += 1;
+    }
+
+    const checker = (arr) => arr.every((v) => v === true);
+
+    return checker(arrayOfTruth);
+  }
+
+  checkColPosForRandomPlacements(randomPlacement, randomLength) {
+    const col = randomPlacement.slice(0, 1);
+    const colCharCode = col.charCodeAt(0);
+    const row = randomPlacement.slice(1);
+
+    const arrayOfTruth = [];
+    let counter = 0;
+    while (counter !== randomLength) {
+      if (
+        this.adjacencyList.hasOwnProperty(
+          String.fromCharCode(colCharCode + counter).concat(row)
+        ) &&
+        this.adjacencyList[
+          String.fromCharCode(colCharCode + counter).concat(row)
+        ].slot === null
+      ) {
+        arrayOfTruth.push(true);
+      } else {
+        arrayOfTruth.push(false);
+      }
+
+      counter += 1;
+    }
+
+    const checker = (arr) => arr.every((v) => v === true);
+
+    return checker(arrayOfTruth);
   }
 
   placeShip(coord, length, rowOrCol) {
@@ -78,29 +164,25 @@ export default class Gameboard {
     // Need to redo tests for this function
     let result;
     if (this.adjacencyList[coord].slot === null) {
-      console.log('SLOT === NULL');
       this.missedLogs.add(coord);
       result = false;
       this.adjacencyList[coord].status = 'Wtouched';
       return result;
     }
     if (this.adjacencyList[coord].status === 'Wtouched') {
-      console.log('SLOT === NULL && STATUS = WTOUCHED');
       result = false;
       return result;
     }
     if (this.adjacencyList[coord].slot.sunkFn()) {
-      console.log('IF SLOT SUNKFN IS TRUE');
       result = true;
-      console.log('BOUYA');
+
       return result;
     }
     if (this.adjacencyList[coord].status === 'Stouched') {
-      console.log('IF SHIP IS TOUCHED');
       result = false;
       return result;
     }
-    console.log('HIT FN AND CHANGE STATUS');
+
     this.adjacencyList[coord].slot.hitFn();
     this.adjacencyList[coord].status = 'Stouched';
 
@@ -108,7 +190,6 @@ export default class Gameboard {
       this.adjacencyList[coord].slot !== null &&
       this.adjacencyList[coord].slot.sunkFn() === true
     ) {
-      console.log('IF NOT NULL && SUNK SO REMOVE FROM SHIPSLOGS');
       const shipIndex = this.shipsLogs.findIndex((item) => item.sunk === true);
       this.shipsLogs.splice(shipIndex, 1);
 
@@ -119,36 +200,6 @@ export default class Gameboard {
     result = true;
     return result;
   }
-
-  /* receiveAttack(coord) {
-    let result;
-    if (
-      this.adjacencyList[coord].slot !== null &&
-      this.adjacencyList[coord].slot !== 'touched'
-    ) {
-      this.adjacencyList[coord].slot.hitFn();
-
-      if (this.adjacencyList[coord].slot.sunkFn() === true) {
-        const shipIndex = this.shipsLogs.findIndex(
-          (item) => item.sunk === true
-        );
-
-        this.shipsLogs.splice(shipIndex, 1);
-
-        this.adjacencyList[coord].slot = 'touched';
-        result = 'SUNK';
-        return result;
-      }
-      this.adjacencyList[coord].slot = 'touched';
-      result = true;
-    } else {
-      this.missedLogs = new Set().add(coord);
-      result = false;
-      this.adjacencyList[coord].slot = 'Wtouched';
-      return result;
-    }
-    return result;
-  } */
 
   allSunk() {
     let result = false;

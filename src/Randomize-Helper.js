@@ -17,3 +17,21 @@ export function generateRandomMove() {
   const concat = string.concat(row.toString());
   return concat;
 }
+
+export function generateDirection() {
+  const randomNumb = generateRandom(1, 2);
+  if (randomNumb === 1) {
+    return 'row';
+  }
+  return 'col';
+}
+
+export function generateLength(array) {
+  if (array.length === 0) {
+    return 'Error';
+  }
+  const randomIndex = Math.floor(Math.random() * array.length);
+
+  const item = array[randomIndex];
+  return item;
+}
