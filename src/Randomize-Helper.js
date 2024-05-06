@@ -10,7 +10,6 @@ export function generateRandom(min, max) {
 }
 
 export function generateRandomMove() {
-  // 65 74
   const col = generateRandom(65, 74);
   const row = generateRandom(1, 10);
   const string = String.fromCharCode(col);

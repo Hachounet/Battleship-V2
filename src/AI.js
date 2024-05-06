@@ -47,7 +47,6 @@ export default class AI {
         }
         this.queue.push(neighbor);
       });
-      // choose correct cell and launch play
       const shiftedEl = this.queue.shift();
       result = this.play(false, shiftedEl);
       return result;

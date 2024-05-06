@@ -1,6 +1,7 @@
 /* eslint-disable no-param-reassign */
-/* eslint-disable no-console */
 /* eslint-disable class-methods-use-this */
+
+// This Controller could be refactored by avoiding all the p*entries and p*keys by just passing a reference to himself to GRender and render
 
 import GeneralRender from './General-Render';
 import Player from './Player';
@@ -28,7 +29,6 @@ export default class Controller {
   }
 
   restart() {
-    console.log('launched');
     this.player1 = new Player('Player 1');
     this.player2 = new Player('AI');
     this.p1keys = this.player1.Gameboard.adjacencyList;
@@ -84,6 +84,7 @@ export default class Controller {
   }
 
   generateNewRender() {
+    // False is to avoid recreating new eventListeners
     this.render = new Render(
       this.p1entries,
       this.p2entries,
@@ -106,13 +107,16 @@ export default class Controller {
   }
 
   makeAIPlay() {
+    // Get adjacencyList from player 1 to get positions to know where to play
+
     const data = this.player1.Gameboard.adjacencyList;
     const coord = this.player2.gamemode.logic(data);
     this.receiveAttackPos(coord);
   }
 
   endOfGame() {
-    console.log(this.player1.Gameboard.shipsLogs);
+    // Need to manually change this.playerTurn to P1 to avoid first click cancelled because not right turn. AI can't autoplay.
+
     let result = false;
     if (this.player1.Gameboard.allSunk()) {
       this.GRender.changeMessage(`${this.playerTurn} have win !`);

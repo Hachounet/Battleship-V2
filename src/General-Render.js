@@ -4,8 +4,6 @@
 /* This class generates the general rendering of the application. The order of implementation is important to ensure that the various functions retrieve the necessary elements. It could be refactored by working on the controller instance rather than on the parameters given at instantiation.
  */
 
-import Gameboard from './Gameboard';
-
 export default class GeneralRender {
   constructor(p1keys, p2keys, controller) {
     this.P1keys = Object.keys(p1keys);

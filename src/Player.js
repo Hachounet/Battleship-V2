@@ -5,7 +5,6 @@ export default class Player {
   constructor(player) {
     this.Gameboard = new Gameboard();
     this.player = player;
-    this.winner = false;
     this.gamemode = false;
     this.switchAI();
   }
