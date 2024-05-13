@@ -11,7 +11,8 @@
     "prettier:fix": "npm run prettier -- --write",
     "format": "npm run prettier:fix && npm run lint:fix",
     "start": "webpack serve --mode development",
-    "build": "webpack"
+    "build": "webpack",
+    "deploy": "git subtree push --prefix dist origin gh-pages"
   },
   "keywords": [],
   "author": "",
